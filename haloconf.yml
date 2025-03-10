@@ -50,3 +50,10 @@
             mode: 'access'
       loop: "{{ hostvars[inventory_hostname]['interfaces'] }}"
       when: "item['sw_mode'] == 'access'"
+
+- name: Save running-config on all devices
+  hosts: all_devices
+  tasks:
+    - name: Save running to startup when modified
+      cisco.ios.ios_config:
+        save_when: modified
