@@ -1,0 +1,52 @@
+---
+- name: Create VLANs
+  hosts: all_devices
+  tasks:
+    - name: Create VLANs if defined
+      cisco.ios.ios_vlans:
+        config:
+          - name: "{{ item['name'] }}"
+            vlan_id: "{{ item['id'] }}"
+            state: active
+            shutdown: disabled
+      loop: "{{ hostvars[inventory_hostname]['vlans'] }}"
+      when: "item['name'] is defined"
+
+- name: Set interfaces
+  hosts: all_devices
+  tasks:
+    - name: Set interface description if defined
+      cisco.ios.ios_interfaces:
+        config:
+          - name: "{{ item['name'] }}"
+            description: "{{ item['description'] }}"
+      loop: "{{ hostvars[inventory_hostname]['interfaces'] }}"
+      when: "item['description'] is defined"
+
+    - name: Set interface mode if defined
+      cisco.ios.ios_interfaces:
+        config:
+          - name: "{{ item['name'] }}"
+            mode: "{{ item['mode'] }}"
+      loop: "{{ hostvars[inventory_hostname]['interfaces'] }}"
+      when: "item['mode'] is defined"
+
+    - name: Set up Trunk interfaces if defined
+      cisco.ios.ios_l2_interfaces:
+        config:
+          - name: "{{ item['name'] }}"
+            trunk:
+              allowed_vlans: "{{ item['allowed_vlans'] }}"
+            mode: 'trunk'
+      loop: "{{ hostvars[inventory_hostname]['interfaces'] }}"
+      when: "item['sw_mode'] == 'trunk'"
+
+    - name: Set up Access interfaces if defined
+      cisco.ios.ios_l2_interfaces:
+        config:
+          - name: "{{ item['name'] }}"
+            access:
+              vlan: "{{ item['acc_vlan'] }}"
+            mode: 'access'
+      loop: "{{ hostvars[inventory_hostname]['interfaces'] }}"
+      when: "item['sw_mode'] == 'access'"

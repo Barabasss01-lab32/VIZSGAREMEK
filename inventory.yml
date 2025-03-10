@@ -1,0 +1,261 @@
+site_off:
+  hosts:
+    l3_1:
+      ansible_host: 10.20.99.6 #OFF-L3-1 Management IP
+      interfaces:
+        - name: GigabitEthernet1/0/1
+          description: Foldszint
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: GigabitEthernet1/0/2
+          description: 1.emelet
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: GigabitEthernet1/0/3
+          description: 2.emelet
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: GigabitEthernet1/0/4
+          description: 3.emelet
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: GigabitEthernet1/0/5
+          description: "=> DIST1"
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: TenGigabitEthernet1/0/47
+          description: Port-channel 1
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: TenGigabitEthernet1/0/48
+          description: Port-channel 1
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+    l3_2:
+      ansible_host: 10.20.99.5 #OFF-L3-2 Management IP
+      interfaces:
+        - name: GigabitEthernet1/0/1
+          description: Foldszint
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: GigabitEthernet1/0/2
+          description: 1.emelet
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: GigabitEthernet1/0/3
+          description: 2.emelet
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: GigabitEthernet1/0/4
+          description: 3.emelet
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: GigabitEthernet1/0/5
+          description: "=> DIST2"
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: GigabitEthernet1/0/35
+          mode: layer2
+          sw_mode: access
+          acc_vlan: 99
+          description: "=> WIN-SRV"
+        - name: GigabitEthernet1/0/36
+          mode: layer2
+          sw_mode: access
+          acc_vlan: 99
+          description: "=> LIN-SRV"
+        - name: TenGigabitEthernet1/0/47
+          description: Port-channel 1
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+        - name: TenGigabitEthernet1/0/48
+          description: Port-channel 1
+          mode: layer2
+          sw_mode: trunk
+          allowed_vlans: 20,21,22,23,99
+  vars:
+    vlans:
+      - name: ACCOUNTING
+        id: 20
+      - name: SHIPPING
+        id: 21
+      - name: SALES
+        id: 22
+      - name: LOGISTICS
+        id: 23
+    
+site_fact:
+  hosts:
+    f_sw1:
+      ansible_host: 172.20.0.250 #F-SW1 NE A 7-es SWITCHET, MERT SZAR
+      interfaces:
+        - name: FastEthernet0/23
+          description: Port-channel 1
+          sw_mode: trunk
+          allowed_vlans: '1'
+        - name: FastEthernet0/24
+          description: Port-channel 1
+          sw_mode: trunk
+          allowed_vlans: '1'
+        - name: GigabitEthernet0/1
+          description: "=> F-R1"
+          sw_mode: trunk
+          allowed_vlans: '1'
+    f_sw2:
+      ansible_host: 172.20.0.251 #F-SW2
+      interfaces:
+        - name: FastEthernet0/23
+          description: Port-channel 1
+          sw_mode: trunk
+          allowed_vlans: '1'
+        - name: FastEthernet0/24
+          description: Port-channel 1
+          sw_mode: trunk
+          allowed_vlans: '1'
+        - name: GigabitEthernet0/1
+          description: "=> F-R2"
+          sw_mode: trunk
+          allowed_vlans: '1'
+
+site_ware:
+  hosts:
+    w_sw1:
+      ansible_host: 192.168.11.253 #W-SW1
+      interfaces:
+        - name: GigabitEthernet0/1
+          description: "=> W-R1"
+          sw_mode: trunk
+          allowed_vlans: 1,11,22,33
+        - name: FastEthernet0/1
+          description: "VLAN 11"
+          sw_mode: access
+          acc_vlan: 11
+        - name: FastEthernet0/2
+          description: "VLAN 11"
+          sw_mode: access
+          acc_vlan: 11
+        - name: FastEthernet0/3
+          description: "VLAN 11"
+          sw_mode: access
+          acc_vlan: 11
+        - name: FastEthernet0/4
+          description: "VLAN 11"
+          sw_mode: access
+          acc_vlan: 11
+        - name: FastEthernet0/5
+          description: "VLAN 11"
+          sw_mode: access
+          acc_vlan: 11
+        - name: FastEthernet0/6
+          description: "VLAN 11"
+          sw_mode: access
+          acc_vlan: 11
+        - name: FastEthernet0/7
+          description: "VLAN 11"
+          sw_mode: access
+          acc_vlan: 11
+        - name: FastEthernet0/8
+          description: "VLAN 11"
+          sw_mode: access
+          acc_vlan: 11
+        - name: FastEthernet0/9
+          description: "VLAN 22"
+          sw_mode: access
+          acc_vlan: 22
+        - name: FastEthernet0/10
+          description: "VLAN 22"
+          sw_mode: access
+          acc_vlan: 22
+        - name: FastEthernet0/11
+          description: "VLAN 22"
+          sw_mode: access
+          acc_vlan: 22
+        - name: FastEthernet0/11
+          description: "VLAN 22"
+          sw_mode: access
+          acc_vlan: 22
+        - name: FastEthernet0/12
+          description: "VLAN 22"
+          sw_mode: access
+          acc_vlan: 22
+        - name: FastEthernet0/13
+          description: "VLAN 22"
+          sw_mode: access
+          acc_vlan: 22
+        - name: FastEthernet0/14
+          description: "VLAN 22"
+          sw_mode: access
+          acc_vlan: 22
+        - name: FastEthernet0/15
+          description: "VLAN 22"
+          sw_mode: access
+          acc_vlan: 22
+        - name: FastEthernet0/16
+          description: "VLAN 22"
+          sw_mode: access
+          acc_vlan: 22
+        - name: FastEthernet0/17
+          description: "VLAN 33"
+          sw_mode: access
+          acc_vlan: 33
+        - name: FastEthernet0/18
+          description: "VLAN 33"
+          sw_mode: access
+          acc_vlan: 33
+        - name: FastEthernet0/19
+          description: "VLAN 33"
+          sw_mode: access
+          acc_vlan: 33
+        - name: FastEthernet0/20
+          description: "VLAN 33"
+          sw_mode: access
+          acc_vlan: 33
+        - name: FastEthernet0/21
+          description: "VLAN 33"
+          sw_mode: access
+          acc_vlan: 33
+        - name: FastEthernet0/22
+          description: "VLAN 33"
+          sw_mode: access
+          acc_vlan: 33
+        - name: FastEthernet0/23
+          description: "VLAN 33"
+          sw_mode: access
+          acc_vlan: 33
+        - name: FastEthernet0/24
+          description: "VLAN 33"
+          sw_mode: access
+          acc_vlan: 33
+  vars:
+    vlans:
+      - name: STOCK1
+        id: 11
+      - name: STOCK2
+        id: 22
+      - name: STOCK3
+        id: 33
+
+all_devices:
+  children:
+    site_off:
+    site_fact:
+    site_ware:
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+    ansible_network_os: cisco.ios.ios
+    ansible_user: ansible
+    ansible_password: ansibleipege
+    
