@@ -1,0 +1,174 @@
+hostname W-R1
+!
+crypto isakmp policy 30
+ encryption aes
+ hash sha
+ authentication pre-share
+ group 5
+ lifetime 43200
+crypto isakmp key IKEpass address 5.187.135.1        
+crypto isakmp key IKEpass address 5.148.200.1        
+crypto isakmp key IKEpass address 5.38.152.2       
+crypto isakmp key IKEpass address 5.63.195.2       
+!
+crypto ipsec transform-set SET1 esp-aes esp-sha-hmac 
+ mode tunnel
+!
+crypto ipsec profile PROFILE
+ set transform-set SET1 
+!
+ip dhcp excluded-address 192.168.11.253 192.168.11.254
+ip dhcp excluded-address 192.168.22.125 192.168.22.126
+ip dhcp excluded-address 192.168.33.61 192.168.33.62
+!
+ip dhcp pool 11
+ network 192.168.11.0 255.255.255.0
+ dns-server 8.8.8.8 
+ default-router 192.168.11.254 
+!
+ip dhcp pool 22
+ network 192.168.22.0 255.255.255.128
+ default-router 192.168.22.126 
+ dns-server 8.8.8.8 
+!
+ip dhcp pool 33
+ network 192.168.33.0 255.255.255.192
+ default-router 192.168.33.62 
+ dns-server 8.8.8.8 
+!
+ipv6 unicast-routing
+ipv6 dhcp pool IPV6
+ address prefix 2A02:ABCD:ABCD:ABCD::/64
+ dns-server 2001:4860:4860::8888
+!
+ipv6 dhcp pool IPV611
+ address prefix 2A02:ABCD:ABCD:AB11::/64
+ dns-server 2001:4860:4860::8888
+!
+ipv6 dhcp pool IPV622
+ address prefix 2A02:ABCD:ABCD:AB22::/64
+ dns-server 2001:4860:4860::8888
+!
+ipv6 dhcp pool IPV633
+ address prefix 2A02:ABCD:ABCD:AB33::/64
+ dns-server 2001:4860:4860::8888
+!
+interface GigabitEthernet0/0/0
+ ip address 5.206.190.1 255.255.255.252
+ ipv6 address FE80::1 link-local
+ ipv6 address 2A02:ABCD:ABCD:AB00::1DEF/64
+ ip nat outside
+ no sh
+!
+interface GigabitEthernet0/0/1
+ negotiation auto
+ ipv6 address FE80::DEF link-local
+ ipv6 address 2A02:ABCD:ABCD:AB01::DEF/64
+ ipv6 dhcp server IPV6
+ no shutdown
+!
+interface GigabitEthernet0/0/1.11
+ encapsulation dot1Q 11
+ ip address 192.168.11.254 255.255.255.0
+ ip nat inside
+ ipv6 address FE80::DE11 link-local
+ ipv6 address 2A02:ABCD:ABCD:AB11::DEF/64
+ ipv6 dhcp server IPV611
+!
+interface GigabitEthernet0/0/1.22
+ encapsulation dot1Q 22
+ ip address 192.168.22.126 255.255.255.128
+ ip nat inside
+ ipv6 address FE80::DE22 link-local
+ ipv6 address 2A02:ABCD:ABCD:AB22::DEF/64
+ ipv6 dhcp server IPV622
+!
+interface GigabitEthernet0/0/1.33
+ encapsulation dot1Q 33
+ ip address 192.168.33.62 255.255.255.192
+ ip nat inside
+ ipv6 address FE80::DE33 link-local
+ ipv6 address 2A02:ABCD:ABCD:AB33::DEF/64
+ ipv6 dhcp server IPV633
+!
+interface Serial0/1/0
+ ip address 10.0.3.2 255.255.255.252
+ ip nat inside
+ ip ospf 1 area 0
+ encapsulation ppp
+ ppp authentication chap
+ no sh
+!
+interface Serial0/1/1
+ ip address 10.0.4.2 255.255.255.252
+ ip nat inside
+ ip ospf 1 area 0
+ encapsulation ppp
+ ppp authentication chap
+ no sh
+!
+interface Tunnel0
+ ip address 10.10.10.5 255.255.255.254
+ ip ospf 1 area 0
+ tunnel source GigabitEthernet0/0/0
+ tunnel mode ipsec ipv4
+ tunnel destination 5.38.152.2
+ tunnel protection ipsec profile PROFILE
+!
+interface Tunnel1
+ ip address 10.10.10.11 255.255.255.254
+ ip ospf 1 area 0
+ tunnel source GigabitEthernet0/0/0
+ tunnel mode ipsec ipv4
+ tunnel destination 5.63.195.2
+ tunnel protection ipsec profile PROFILE
+!
+interface Tunnel2
+ ip address 10.10.10.13 255.255.255.254
+ ip ospf 1 area 0
+ tunnel source GigabitEthernet0/0/0
+ tunnel mode ipsec ipv4
+ tunnel destination 5.187.135.1
+ tunnel protection ipsec profile PROFILE
+!
+interface Tunnel3
+ ip address 10.10.10.15 255.255.255.254
+ ip ospf 1 area 0
+ tunnel source GigabitEthernet0/0/0
+ tunnel mode ipsec ipv4
+ tunnel destination 5.148.200.1
+ tunnel protection ipsec profile PROFILE
+!
+router ospf 1
+ default-information originate
+ passive-interface GigabitEthernet0/0/1
+ passive-interface GigabitEthernet0/0/1.11
+ passive-interface GigabitEthernet0/0/1.22
+ passive-interface GigabitEthernet0/0/1.33
+!
+ip nat inside source list 1 interface GigabitEthernet0/0/0 overload
+!
+ip route 0.0.0.0 0.0.0.0 gigabitEthernet 0/0/0
+ip route 10.20.0.0 255.255.255.0 5.38.152.2
+ip route 10.20.0.0 255.255.255.0 5.63.195.2
+ip route 10.20.1.0 255.255.255.0 5.38.152.2
+ip route 10.20.1.0 255.255.255.0 5.63.195.2
+ip route 10.20.2.0 255.255.255.0 5.38.152.2
+ip route 10.20.2.0 255.255.255.0 5.63.195.2
+ip route 10.20.3.0 255.255.255.0 5.38.152.2
+ip route 10.20.3.0 255.255.255.0 5.63.195.2
+ip route 10.20.254.2 255.255.255.255 serial0/1/1 1
+ip route 10.20.254.2 255.255.255.255 serial0/1/0 2
+ip route 172.20.0.0 255.255.240.0 5.148.200.1
+ip route 172.20.0.0 255.255.240.0 5.187.135.1
+!
+access-list 1 permit 10.0.0.0 0.31.255.255
+access-list 1 permit 172.20.0.0 0.0.15.255
+access-list 1 permit 192.168.0.0 0.0.255.255
+!
+username DIST1 password CHAPpass
+username DIST2 password CHAPpass
+!
+end
+
+

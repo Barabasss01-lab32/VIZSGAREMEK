@@ -1,0 +1,24 @@
+hostname OFF-FW
+!
+interface GigabitEthernet1/1
+ nameif outside
+ security-level 0
+ ip address 10.20.255.2 255.255.255.252
+!
+interface GigabitEthernet1/2
+ nameif inside
+ security-level 100
+ ip address 10.20.254.1 255.255.255.248
+!
+object network WEBSERVER
+ host 10.20.254.2
+access-list OUTSIDE-IN extended permit tcp any host 10.20.254.2 eq www
+access-list OUTSIDE-IN extended permit tcp any host 10.20.254.2 eq https
+!
+access-group OUTSIDE-IN in interface outside
+route outside 0.0.0.0 0.0.0.0 10.20.255.1  
+!
+end
+wr
+
+

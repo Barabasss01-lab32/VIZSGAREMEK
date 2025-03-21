@@ -1,0 +1,41 @@
+SDM PREFER
+________________________________________
+hostname W-SW
+!
+vlan 11
+name STOCK1
+vlan 22
+name STOCK2
+vlan 33
+name STOCK3
+!
+ip domain-name ipege.local
+crypto key generate rsa modulus 2048
+ip ssh version 2
+!
+username ansible privilege 15 secret ansibleipege
+username manage privilege 15 secret management9654
+!
+interface range FastEthernet0/1-8
+ switchport access vlan 11
+!
+interface range FastEthernet0/9-16
+ switchport access vlan 22
+!
+interface range FastEthernet0/17-24
+ switchport access vlan 33
+!
+interface GigabitEthernet0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 1,11,22,33
+!
+interface Vlan11
+ ip address 192.168.11.253 255.255.255.0
+ ipv6 address autoconfig
+ ipv6 enable
+ no shutdown
+!
+line vty 0 4
+ transport input ssh
+ login local
+end

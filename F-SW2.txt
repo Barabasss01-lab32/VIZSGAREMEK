@@ -1,0 +1,31 @@
+hostname F-SW2
+!
+ip domain-name ipege.local
+crypto key generate rsa modulus 2048
+ip ssh version 2
+!
+int vlan 1
+ ip address 172.20.0.251 255.255.240.0
+ no shutdown
+!
+username ansible privilege 15 secret ansibleipege
+username manage privilege 15 secret management9654
+!
+spanning-tree mode rapid-pvst
+!
+interface FastEthernet0/23
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface FastEthernet0/24
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface GigabitEthernet0/1
+ switchport mode trunk
+!
+line vty 0 4
+ transport input ssh
+ login local
+!
+end      

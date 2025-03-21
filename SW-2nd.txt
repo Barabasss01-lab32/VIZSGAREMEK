@@ -1,0 +1,66 @@
+hostname SW-2nd
+!
+vlan 20
+name ACCOUNTING
+vlan 21
+name SHIPPING
+vlan 22
+name SALES
+vlan 23
+name LOGISTICS
+vlan 99
+name NATIVE
+!
+ip dhcp snooping
+ip dhcp snooping vlan 20-23,99
+!
+spanning-tree mode rapid-pvst
+!
+interface range FastEthernet0/1-6
+ switchport access vlan 20
+ switchport mode access
+ switchport port-security
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface range FastEthernet0/7-12
+ switchport access vlan 21
+ switchport mode access
+ switchport port-security
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface range FastEthernet0/13-18
+ switchport access vlan 22
+ switchport mode access
+ switchport port-security
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface range FastEthernet0/19-24
+ switchport access vlan 23
+ switchport mode access
+ switchport port-security
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface range GigabitEthernet0/1-2
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 20-23,99
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree link-type point-to-point
+ ip dhcp snooping trust
+ ip dhcp snooping limit rate 5
+!
+end
+wr
+
