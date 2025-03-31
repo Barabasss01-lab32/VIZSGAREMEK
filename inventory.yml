@@ -100,7 +100,7 @@ site_off:
 site_fact:
   hosts:
     f_sw1:
-      ansible_host: 172.20.0.250 #F-SW1 NE A 7-es SWITCHET, MERT SZAR
+      ansible_host: 172.20.0.250 #F-SW1
       interfaces:
         - name: FastEthernet0/23
           description: Port-channel 1
