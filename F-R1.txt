@@ -101,4 +101,5 @@ access-list 1 permit 192.168.0.0 0.0.255.255
 username DIST2 password CHAPpass
 !
 end
-
+!
+wr
