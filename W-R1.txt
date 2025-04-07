@@ -170,5 +170,5 @@ username DIST1 password CHAPpass
 username DIST2 password CHAPpass
 !
 end
-
-
+!
+wr
