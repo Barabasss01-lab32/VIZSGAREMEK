@@ -161,4 +161,6 @@ username F-R2 password CHAPpass
 username W-R1 password CHAPpass
 !
 end
+!
+wr
 
